@@ -647,12 +647,12 @@ const AnweshPlatformer = () => {
         
         {gameState === 'playing' && (
           <div className="space-y-4">
-            <div className="relative mx-auto w-full h-[85vh] sm:h-auto">
+            <div className="relative mx-auto w-full max-w-4xl">
               <canvas 
                 ref={canvasRef} 
                 width={800} 
                 height={500} 
-                className="border-4 border-blue-500 rounded w-full h-full sm:h-auto touch-none"
+                className="border-4 border-blue-500 rounded w-full h-auto touch-none"
               />
               
               {/* Mobile Touch Controls - Overlaid on canvas */}
