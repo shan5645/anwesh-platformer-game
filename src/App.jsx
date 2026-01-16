@@ -647,42 +647,55 @@ const AnweshPlatformer = () => {
         
         {gameState === 'playing' && (
           <div className="space-y-4">
-            <div className="relative mx-auto w-full max-w-4xl">
+            <div className="relative mx-auto w-full max-w-4xl" style={{ height: 'auto', minHeight: '80vh' }}>
               <canvas 
                 ref={canvasRef} 
                 width={800} 
                 height={500} 
-                className="border-4 border-blue-500 rounded w-full h-auto touch-none"
+                className="border-4 border-blue-500 rounded w-full touch-none"
+                style={{ height: '80vh', width: '100%' }}
               />
               
               {/* Mobile Touch Controls - Overlaid on canvas */}
               <div className="sm:hidden absolute inset-0 pointer-events-none">
-                {/* Jump button - LEFT SIDE - Just a circle */}
+                {/* Jump button - LEFT SIDE - Lower position */}
                 <button
-                  onTouchStart={() => setMobileControls(prev => ({ ...prev, jump: true }))}
-                  onTouchEnd={() => setMobileControls(prev => ({ ...prev, jump: false }))}
-                  onMouseDown={() => setMobileControls(prev => ({ ...prev, jump: true }))}
-                  onMouseUp={() => setMobileControls(prev => ({ ...prev, jump: false }))}
-                  className="pointer-events-auto absolute bottom-4 left-4 bg-white/20 text-white w-20 h-20 rounded-full font-bold text-lg active:bg-white/40 shadow-lg backdrop-blur-sm border-2 border-white/50"
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    setMobileControls(prev => ({ ...prev, jump: true }));
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    setMobileControls(prev => ({ ...prev, jump: false }));
+                  }}
+                  className="pointer-events-auto absolute bottom-2 left-2 bg-white/20 text-white w-20 h-20 rounded-full font-bold text-lg active:bg-white/40 shadow-lg backdrop-blur-sm border-2 border-white/50"
                 >
                 </button>
                 
-                {/* Left/Right arrows - RIGHT SIDE - More transparent */}
-                <div className="pointer-events-auto absolute bottom-4 right-4 flex gap-3">
+                {/* Left/Right arrows - RIGHT SIDE - Lower position */}
+                <div className="pointer-events-auto absolute bottom-2 right-2 flex gap-3">
                   <button
-                    onTouchStart={() => setMobileControls(prev => ({ ...prev, left: true }))}
-                    onTouchEnd={() => setMobileControls(prev => ({ ...prev, left: false }))}
-                    onMouseDown={() => setMobileControls(prev => ({ ...prev, left: true }))}
-                    onMouseUp={() => setMobileControls(prev => ({ ...prev, left: false }))}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      setMobileControls(prev => ({ ...prev, left: true }));
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      setMobileControls(prev => ({ ...prev, left: false }));
+                    }}
                     className="bg-white/20 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-white/40 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/50"
                   >
                     <ArrowLeft size={32} />
                   </button>
                   <button
-                    onTouchStart={() => setMobileControls(prev => ({ ...prev, right: true }))}
-                    onTouchEnd={() => setMobileControls(prev => ({ ...prev, right: false }))}
-                    onMouseDown={() => setMobileControls(prev => ({ ...prev, right: true }))}
-                    onMouseUp={() => setMobileControls(prev => ({ ...prev, right: false }))}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      setMobileControls(prev => ({ ...prev, right: true }));
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      setMobileControls(prev => ({ ...prev, right: false }));
+                    }}
                     className="bg-white/20 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-white/40 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/50"
                   >
                     <ArrowRight size={32} />
