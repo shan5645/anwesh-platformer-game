@@ -634,3 +634,9 @@ export default function AnweshPlatformer() {
                 <Pause size={24} />
               </button>
             </div>
+           </div>
+    )}
+  </div>
+</div>
+);
+}
