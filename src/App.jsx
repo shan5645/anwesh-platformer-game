@@ -647,35 +647,36 @@ const AnweshPlatformer = () => {
         
         {gameState === 'playing' && (
           <div className="space-y-4">
-            <div className="relative mx-auto max-w-full">
+            <div className="relative mx-auto w-full">
               <canvas 
                 ref={canvasRef} 
                 width={800} 
                 height={500} 
-                className="border-4 border-blue-500 rounded mx-auto max-w-full touch-none"
+                className="border-4 border-blue-500 rounded w-full h-auto touch-none"
+                style={{ maxHeight: '70vh' }}
               />
               
               {/* Mobile Touch Controls - Overlaid on canvas */}
               <div className="sm:hidden absolute inset-0 pointer-events-none">
-                {/* Jump button - LEFT SIDE */}
+                {/* Jump button - LEFT SIDE - No text, gray color */}
                 <button
                   onTouchStart={() => setMobileControls(prev => ({ ...prev, jump: true }))}
                   onTouchEnd={() => setMobileControls(prev => ({ ...prev, jump: false }))}
                   onMouseDown={() => setMobileControls(prev => ({ ...prev, jump: true }))}
                   onMouseUp={() => setMobileControls(prev => ({ ...prev, jump: false }))}
-                  className="pointer-events-auto absolute bottom-4 left-4 bg-red-500/60 text-white w-20 h-20 rounded-full font-bold text-lg active:bg-red-700/80 shadow-lg backdrop-blur-sm border-2 border-white/30"
+                  className="pointer-events-auto absolute bottom-4 left-4 bg-gray-500/60 text-white w-20 h-20 rounded-full font-bold text-lg active:bg-gray-700/80 shadow-lg backdrop-blur-sm border-2 border-white/30"
                 >
-                  JUMP
+                  ↑
                 </button>
                 
-                {/* Left/Right arrows - RIGHT SIDE */}
+                {/* Left/Right arrows - RIGHT SIDE - Gray color */}
                 <div className="pointer-events-auto absolute bottom-4 right-4 flex gap-3">
                   <button
                     onTouchStart={() => setMobileControls(prev => ({ ...prev, left: true }))}
                     onTouchEnd={() => setMobileControls(prev => ({ ...prev, left: false }))}
                     onMouseDown={() => setMobileControls(prev => ({ ...prev, left: true }))}
                     onMouseUp={() => setMobileControls(prev => ({ ...prev, left: false }))}
-                    className="bg-blue-500/60 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-blue-700/80 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/30"
+                    className="bg-gray-500/60 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-gray-700/80 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/30"
                   >
                     <ArrowLeft size={32} />
                   </button>
@@ -684,7 +685,7 @@ const AnweshPlatformer = () => {
                     onTouchEnd={() => setMobileControls(prev => ({ ...prev, right: false }))}
                     onMouseDown={() => setMobileControls(prev => ({ ...prev, right: true }))}
                     onMouseUp={() => setMobileControls(prev => ({ ...prev, right: false }))}
-                    className="bg-blue-500/60 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-blue-700/80 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/30"
+                    className="bg-gray-500/60 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-gray-700/80 shadow-lg flex items-center justify-center backdrop-blur-sm border-2 border-white/30"
                   >
                     <ArrowRight size={32} />
                   </button>
