@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, RotateCcw, Save, ChevronLeft } from 'lucide-react';
+import { Play, RotateCcw, Save, ChevronLeft, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const AnweshPlatformer = () => {
   const canvasRef = useRef(null);
@@ -10,7 +10,7 @@ const AnweshPlatformer = () => {
   const [savedLevels, setSavedLevels] = useState([]);
   const gameLoopRef = useRef(null);
   const keysRef = useRef({});
-  const touchStartRef = useRef(null);
+  const [mobileControls, setMobileControls] = useState({ left: false, right: false, jump: false });
 
   const playerRef = useRef({
     x: 50,
@@ -436,17 +436,17 @@ const AnweshPlatformer = () => {
     const moveSpeed = 5;
     const jumpPower = 12;
     
-    if (keysRef.current['ArrowLeft'] || keysRef.current['a']) {
+    if (keysRef.current['ArrowLeft'] || keysRef.current['a'] || mobileControls.left) {
       player.velocityX = -moveSpeed;
       player.facingRight = false;
-    } else if (keysRef.current['ArrowRight'] || keysRef.current['d']) {
+    } else if (keysRef.current['ArrowRight'] || keysRef.current['d'] || mobileControls.right) {
       player.velocityX = moveSpeed;
       player.facingRight = true;
     } else {
       player.velocityX = 0;
     }
     
-    if ((keysRef.current['ArrowUp'] || keysRef.current[' '] || keysRef.current['w']) && player.onGround) {
+    if ((keysRef.current['ArrowUp'] || keysRef.current[' '] || keysRef.current['w'] || mobileControls.jump) && player.onGround) {
       player.velocityY = -jumpPower;
       player.onGround = false;
     }
@@ -545,7 +545,7 @@ const AnweshPlatformer = () => {
     return () => {
       if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     };
-  }, [gameState, currentLevel, score, lives]);
+  }, [gameState, currentLevel, score, lives, mobileControls]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -567,37 +567,6 @@ const AnweshPlatformer = () => {
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, []);
-
-  const handleTouchStart = (e) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchStartRef.current) return;
-    e.preventDefault();
-    
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - touchStartRef.current.x;
-    const deltaY = touch.clientY - touchStartRef.current.y;
-    
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX > 30) {
-        keysRef.current['ArrowRight'] = true;
-        keysRef.current['ArrowLeft'] = false;
-      } else if (deltaX < -30) {
-        keysRef.current['ArrowLeft'] = true;
-        keysRef.current['ArrowRight'] = false;
-      }
-    } else if (deltaY < -30) {
-      keysRef.current['ArrowUp'] = true;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    touchStartRef.current = null;
-    keysRef.current = {};
-  };
 
   const startGame = () => {
     setLives(3);
@@ -630,22 +599,22 @@ const AnweshPlatformer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-400 to-blue-600 p-4">
-      <div className="bg-white rounded-lg shadow-2xl p-6 max-w-4xl w-full">
-        <h1 className="text-4xl font-bold text-center mb-2 text-blue-600">Anwesh's Adventure</h1>
-        <p className="text-center text-gray-600 mb-4">Help Anwesh collect coins and reach the flag!</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-400 to-blue-600 p-2 sm:p-4">
+      <div className="bg-white rounded-lg shadow-2xl p-3 sm:p-6 max-w-4xl w-full">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2 text-blue-600">Anwesh's Adventure</h1>
+        <p className="text-center text-gray-600 mb-4 text-sm sm:text-base">Help Anwesh collect coins and reach the flag!</p>
         
         {gameState === 'menu' && (
           <div className="text-center space-y-4">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h2 className="text-2xl font-bold mb-4">Select Level</h2>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6 max-h-96 overflow-y-auto">
+            <div className="bg-blue-50 p-4 sm:p-6 rounded-lg">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Select Level</h2>
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 mb-6 max-h-96 overflow-y-auto">
                 {levelsRef.current.map((level, idx) => (
                   <button
                     key={idx}
                     onClick={() => selectLevel(idx)}
                     disabled={idx > 0 && !savedLevels.includes(idx)}
-                    className={`p-3 rounded-lg font-bold transition ${
+                    className={`p-2 sm:p-3 rounded-lg font-bold transition text-sm sm:text-base ${
                       idx > 0 && !savedLevels.includes(idx)
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         : currentLevel === idx
@@ -661,15 +630,15 @@ const AnweshPlatformer = () => {
               
               <button
                 onClick={startGame}
-                className="bg-green-500 text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-green-600 transition flex items-center gap-2 mx-auto"
+                className="bg-green-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-lg sm:text-xl font-bold hover:bg-green-600 transition flex items-center gap-2 mx-auto"
               >
-                <Play size={24} /> Start Game
+                <Play size={20} /> Start Game
               </button>
               
-              <div className="mt-6 text-left bg-white p-4 rounded">
+              <div className="mt-6 text-left bg-white p-4 rounded text-sm sm:text-base">
                 <h3 className="font-bold mb-2">Controls:</h3>
                 <p>🖥️ Desktop: Arrow Keys or WASD to move, Space/Up to jump</p>
-                <p>📱 Mobile: Swipe left/right to move, swipe up to jump</p>
+                <p>📱 Mobile: Use on-screen buttons to move and jump</p>
                 <p>❤️ You have 3 lives - don't run out!</p>
               </div>
             </div>
@@ -683,15 +652,45 @@ const AnweshPlatformer = () => {
               width={800} 
               height={500} 
               className="border-4 border-blue-500 rounded mx-auto max-w-full touch-none"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
             />
+            
+            {/* Mobile Touch Controls */}
+            <div className="sm:hidden flex justify-between items-center gap-4 bg-gray-100 p-4 rounded-lg">
+              <div className="flex gap-3">
+                <button
+                  onTouchStart={() => setMobileControls(prev => ({ ...prev, left: true }))}
+                  onTouchEnd={() => setMobileControls(prev => ({ ...prev, left: false }))}
+                  onMouseDown={() => setMobileControls(prev => ({ ...prev, left: true }))}
+                  onMouseUp={() => setMobileControls(prev => ({ ...prev, left: false }))}
+                  className="bg-blue-500 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-blue-700 shadow-lg flex items-center justify-center"
+                >
+                  <ArrowLeft size={32} />
+                </button>
+                <button
+                  onTouchStart={() => setMobileControls(prev => ({ ...prev, right: true }))}
+                  onTouchEnd={() => setMobileControls(prev => ({ ...prev, right: false }))}
+                  onMouseDown={() => setMobileControls(prev => ({ ...prev, right: true }))}
+                  onMouseUp={() => setMobileControls(prev => ({ ...prev, right: false }))}
+                  className="bg-blue-500 text-white w-16 h-16 rounded-xl font-bold text-2xl active:bg-blue-700 shadow-lg flex items-center justify-center"
+                >
+                  <ArrowRight size={32} />
+                </button>
+              </div>
+              <button
+                onTouchStart={() => setMobileControls(prev => ({ ...prev, jump: true }))}
+                onTouchEnd={() => setMobileControls(prev => ({ ...prev, jump: false }))}
+                onMouseDown={() => setMobileControls(prev => ({ ...prev, jump: true }))}
+                onMouseUp={() => setMobileControls(prev => ({ ...prev, jump: false }))}
+                className="bg-red-500 text-white w-20 h-20 rounded-full font-bold text-lg active:bg-red-700 shadow-lg"
+              >
+                JUMP
+              </button>
+            </div>
             
             <div className="flex gap-2 justify-center flex-wrap">
               <button
                 onClick={() => setGameState('menu')}
-                className="bg-gray-500 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-gray-600"
+                className="bg-gray-500 text-white px-3 sm:px-4 py-2 rounded flex items-center gap-2 hover:bg-gray-600 text-sm sm:text-base"
               >
                 <ChevronLeft size={20} /> Menu
               </button>
@@ -708,15 +707,15 @@ const AnweshPlatformer = () => {
                     facingRight: true
                   };
                 }}
-                className="bg-orange-500 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-orange-600"
+                className="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded flex items-center gap-2 hover:bg-orange-600 text-sm sm:text-base"
               >
-                <RotateCcw size={20} /> Restart Level
+                <RotateCcw size={20} /> Restart
               </button>
               <button
                 onClick={saveProgress}
-                className="bg-purple-500 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-purple-600"
+                className="bg-purple-500 text-white px-3 sm:px-4 py-2 rounded flex items-center gap-2 hover:bg-purple-600 text-sm sm:text-base"
               >
-                <Save size={20} /> Save Progress
+                <Save size={20} /> Save
               </button>
             </div>
           </div>
@@ -724,9 +723,9 @@ const AnweshPlatformer = () => {
         
         {gameState === 'gameOver' && (
           <div className="text-center space-y-4">
-            <h2 className="text-3xl font-bold text-red-600">Game Over!</h2>
-            <p className="text-xl">Final Score: {score}</p>
-            <p className="text-lg">Level Reached: {currentLevel + 1}</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-red-600">Game Over!</h2>
+            <p className="text-lg sm:text-xl">Final Score: {score}</p>
+            <p className="text-base sm:text-lg">Level Reached: {currentLevel + 1}</p>
             <button
               onClick={() => {
                 setGameState('menu');
@@ -734,7 +733,7 @@ const AnweshPlatformer = () => {
                 setScore(0);
                 setLives(3);
               }}
-              className="bg-blue-500 text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-blue-600"
+              className="bg-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-lg sm:text-xl font-bold hover:bg-blue-600"
             >
               Back to Menu
             </button>
@@ -743,9 +742,9 @@ const AnweshPlatformer = () => {
         
         {gameState === 'win' && (
           <div className="text-center space-y-4">
-            <h2 className="text-3xl font-bold text-green-600">🎉 बधाई छ! 🎉</h2>
-            <p className="text-xl">तपाईंले सबै स्तरहरू पूरा गर्नुभयो!</p>
-            <p className="text-2xl font-bold">अन्तिम स्कोर: {score}</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-green-600">🎉 Congratulations! 🎉</h2>
+            <p className="text-lg sm:text-xl">You completed all levels!</p>
+            <p className="text-xl sm:text-2xl font-bold">Final Score: {score}</p>
             <button
               onClick={() => {
                 setGameState('menu');
@@ -754,9 +753,9 @@ const AnweshPlatformer = () => {
                 setLives(3);
                 levelsRef.current = createLevels();
               }}
-              className="bg-blue-500 text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-blue-600"
+              className="bg-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-lg sm:text-xl font-bold hover:bg-blue-600"
             >
-              फेरि खेल्नुहोस्
+              Play Again
             </button>
           </div>
         )}
