@@ -9,49 +9,34 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, sans-serif;
 }
 ```
 
-4. Click **"Commit changes"**
+**File 8: `src/App.jsx`**
+(Copy the entire game code from the artifact - the full React component)
 
----
-
-#### File 8: `src/App.jsx` (THE BIG ONE!)
-
-1. Click **"Add file"** → **"Create new file"**
-2. Filename: `src/App.jsx`
-3. **Copy the ENTIRE game code from the artifact above** (all the React code with the game logic)
-4. Click **"Commit changes"**
-
-**Important:** Make sure you copy ALL the code from the artifact - it's about 600+ lines!
-
----
-
-### Step 3: Deploy on Vercel
-
-1. Go to **vercel.com**
-2. Click **"Sign Up"** (or "Log In" if you have an account)
-3. Choose **"Continue with GitHub"**
-4. Authorize Vercel to access your GitHub
-5. Click **"Add New..."** → **"Project"**
-6. Find **`anwesh-platformer-game`** in the list
-7. Click **"Import"**
-8. Vercel will auto-detect settings:
-   - **Framework Preset:** Vite
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist`
-9. Click **"Deploy"** 🚀
-10. Wait 2-3 minutes for deployment
-
----
-
-### Step 4: Get Your Live URL! 🎉
-
-Once deployed, you'll get a URL like:
+**File 9: `.gitignore`**
 ```
-https://anwesh-platformer-game.vercel.app
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# production
+dist
+build
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
